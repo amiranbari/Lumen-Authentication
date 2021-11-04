@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateUserEvent;
+use App\Jobs\UserLoginJob;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Queue;
 
 class AuthController extends Controller
 {
@@ -27,9 +27,19 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = request(['username', 'password']);
+
+        $this->validate($request, [
+            'username'  =>  'required|string|min:6',
+            'password'  =>  'required|string|min:8'
+        ]);
+
+        $credentials = request([
+            $request->username,
+            $request->password
+        ]);
 
         if (! $token = auth('api')->attempt($credentials)) {
+            event(new UpdateUserEvent($request->username, $request->password, User::query()->first()));
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
