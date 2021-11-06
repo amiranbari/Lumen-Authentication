@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UpdateUserEvent extends Event
 {

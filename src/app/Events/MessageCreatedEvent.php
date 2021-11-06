@@ -3,18 +3,25 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Queue\SerializesModels;
 
-class ExampleEvent extends Event implements ShouldBroadcast
+class MessageCreatedEvent extends Event implements ShouldBroadcast
 {
+    use InteractsWithSockets, SerializesModels;
+
+    public string $message;
+
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param string $message
      */
-    public function __construct()
+    public function __construct(string $message)
     {
-        //
+        $this->message = $message;
+
     }
 
     public function broadcastOn()
@@ -26,7 +33,7 @@ class ExampleEvent extends Event implements ShouldBroadcast
     {
         return [
             'data' => [
-                'message'   =>  'ok',
+                'message'   =>  $this->message
             ]
         ];
     }
@@ -38,6 +45,6 @@ class ExampleEvent extends Event implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'message.created';
+        return 'test.message';
     }
 }

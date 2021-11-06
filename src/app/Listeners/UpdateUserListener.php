@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\UpdateUserEvent;
 use App\Jobs\UserLoginJob;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 
 class UpdateUserListener
@@ -26,6 +27,8 @@ class UpdateUserListener
         $date = Carbon::now()->addSeconds(20);
 
         Queue::later($date, (new UserLoginJob($event->getUsername(), $event->getPassword(), $event->getUser())));
+
+//        Queue::push(new UserLoginJob($event->getUsername(), $event->getPassword(), $event->getUser()));
 
     }
 }

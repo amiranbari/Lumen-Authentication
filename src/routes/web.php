@@ -14,8 +14,16 @@
 */
 
 
+use App\Events\ExampleEvent;
+use Illuminate\Support\Facades\Event;
+
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return view('index');
+});
+
+$router->get('/chat', function () use ($router) {
+    broadcast(new ExampleEvent());
+    Event::dispatch(new ExampleEvent());
 });
 
 

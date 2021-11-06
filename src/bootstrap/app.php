@@ -27,6 +27,8 @@ $app = new Laravel\Lumen\Application(
 
  $app->withEloquent();
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -61,6 +63,8 @@ $app->singleton(
 
 $app->configure('queue');
 
+$app->configure('database');
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -91,13 +95,14 @@ $app->configure('queue');
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+ $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(App\Providers\EventServiceProvider::class);
 
 //custom
 
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 
 
